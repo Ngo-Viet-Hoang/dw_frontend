@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
 
 const FurnitureList = () => {
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [furnitures, setFurnitures] = useState([]);
   useEffect(() => {
-    axios.get(`http:localhost:8888/api/furnitures`).then((res) => {
+    axios.get(`http://127.0.0.1:8000/api/furnitures`).then((res) => {
       console.log(res);
-      setFurnitures(res.data.students);
+      setFurnitures(res.data.furnitures);
       setLoading(false);
     });
   }, []);
@@ -19,30 +20,31 @@ const FurnitureList = () => {
     return <Loading />;
   }
   var furnitureDetails = "";
-  furnitureDetails = furnitures.map((item, index) => {
-    return (
-      <tr key={index}>
-        <td>{item.id}</td>
-        <td>{item.productCode}</td>
-        <td>{item.avatar}</td>
-        <td>{item.name}</td>
-        <td>{item.price}</td>
-        <td>
-          <Link to="/" className="btn btn-success">
-            Edit
-          </Link>
-        </td>
-        <td>
-          <button className="btn btn-danger">Delete</button>
-        </td>
-      </tr>
-    );
-  });
-  async function search(key) {
-    let result = await fetch("http:localhost:8888/api/search" + key);
-    result = await result.json();
-    setData(result);
-  }
+  furnitureDetails = furnitures
+    .filter((item) => {
+      return search.toLowerCase() === ""
+        ? item
+        : item.name.toLowerCase().includes(search);
+    })
+    .map((item, index) => {
+      return (
+        <tr key={index}>
+          <td>{item.id}</td>
+          <td>{item.productCode}</td>
+          <td>{item.avatar}</td>
+          <td>{item.name}</td>
+          <td>{item.price}</td>
+          <td>
+            <Link to="/" className="btn btn-success">
+              Edit
+            </Link>
+          </td>
+          <td>
+            <button className="btn btn-danger">Delete</button>
+          </td>
+        </tr>
+      );
+    });
 
   return (
     <>
@@ -64,7 +66,7 @@ const FurnitureList = () => {
               <div className="card-body">
                 <input
                   type="text"
-                  onChange={(e) => search(e.target.value)}
+                  onChange={(e) => setSearch(e.target.value)}
                   className="form-control"
                   placeholder="Seach Furniture"
                 />
