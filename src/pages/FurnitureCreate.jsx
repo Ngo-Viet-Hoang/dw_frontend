@@ -29,7 +29,7 @@ const FurnitureCreate = () => {
       productCode: furniture.productCode,
     };
     axios
-      .post(`http:localhost:8888/api/furnitures`, data)
+      .post(`http://127.0.0.1:8000/api/furnitures`, data)
       .then((res) => {
         alert(res.data.message);
         navigate("/furnitures");
@@ -82,6 +82,7 @@ const FurnitureCreate = () => {
                       type="text"
                       name="productCode"
                       value={furniture.productCode}
+                      onChange={handleInput}
                       className="form-control"
                     />
                     <span className="text-danger">
@@ -91,9 +92,10 @@ const FurnitureCreate = () => {
                   <div className="mb-3">
                     <label>Price</label>
                     <input
-                      type="text"
-                      name="name"
+                      type="number"
+                      name="price"
                       value={furniture.price}
+                      onChange={handleInput}
                       className="form-control"
                     />
                     <span className="text-danger">{inputErrorList.price}</span>
@@ -104,16 +106,13 @@ const FurnitureCreate = () => {
                       type="text"
                       name="avatar"
                       value={furniture.avatar}
+                      onChange={handleInput}
                       className="form-control"
                     />
                     <span className="text-danger">{inputErrorList.avatar}</span>
                   </div>
                   <div className="mb-3">
-                    <button
-                      type="submit"
-                      name="name"
-                      className="btn btn-primary"
-                    >
+                    <button type="submit" className="btn btn-primary">
                       Save Student
                     </button>
                   </div>
